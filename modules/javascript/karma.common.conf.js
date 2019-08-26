@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/* eslint-env node */
+
 const path = require('path');
 const babel = require('rollup-plugin-babel');
 const entryPoint = path.join(__dirname, 'src', 'test', 'webapp', 'javascript', 'index.js');

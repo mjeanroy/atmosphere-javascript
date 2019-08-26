@@ -14,15 +14,32 @@
  * limitations under the License.
  */
 
+/* eslint-env node */
+
 const path = require('path');
 const log = require('fancy-log');
 const colors = require('ansi-colors');
+const gulp = require('gulp');
 const karma = require('karma');
+const eslint = require('gulp-eslint');
 
+/**
+ * Log debug message in grey.
+ *
+ * @param {string} msg Message to log.
+ * @return {void}
+ */
 function debug(msg) {
   log(colors.grey(msg));
 }
 
+/**
+ * Run karma test suite.
+ *
+ * @param {string} mode Test mode (`tdd`, `test`).
+ * @param {function} done The done callback.
+ * @return {void}
+ */
 function runKarma(mode, done) {
   const fileName = `karma.${mode}.conf.js`;
   const configFile = path.join(__dirname, fileName);
@@ -35,15 +52,46 @@ function runKarma(mode, done) {
   srv.start();
 }
 
+/**
+ * Run test suite once, and exit.
+ *
+ * @param {function} done The done callback.
+ * @return {void}
+ */
 function test(done) {
   runKarma('test', done);
 }
 
+/**
+ * Run test suite and watch for changes.
+ *
+ * @param {function} done The done callback.
+ * @return {void}
+ */
 function tdd(done) {
   runKarma('tdd', done);
 }
 
+/**
+ * Lint source files.
+ *
+ * @return {Stream} The gulp stream.
+ */
+function lint() {
+  const src = [
+    path.join(__dirname, 'src', 'main', '**', '*js'),
+    path.join(__dirname, 'src', 'test', '**', '*js'),
+    path.join(__dirname, '*js'),
+  ];
+
+  return gulp.src(src)
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
+}
+
 module.exports = {
+  lint,
   test,
   tdd,
 };

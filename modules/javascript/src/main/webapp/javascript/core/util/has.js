@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/**
+ * Check if given object has given key as "own property" (i.e not inherited).
+ *
+ * @param {Object} obj The object.
+ * @param {string} key The key to look for.
+ * @return {boolean} `true` if `obj` has `key`, `false` otherwise.
+ */
 export function has(obj, key) {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }

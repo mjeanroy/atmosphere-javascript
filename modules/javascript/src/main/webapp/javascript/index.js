@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/* eslint-disable */
+
 /**
  * Atmosphere.js
  * https://github.com/Atmosphere/atmosphere-javascript

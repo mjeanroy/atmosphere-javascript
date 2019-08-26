@@ -16,8 +16,15 @@
 
 const _trim = String.prototype.trim ?
   (value) => String.prototype.trim.call(value) :
-  (value) => value.toString().replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g, "").replace(/\s+/g, " ");
+  (value) => value.toString().replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g, '').replace(/\s+/g, '');
 
+/**
+ * Trim given value.
+ * If value is not a `string`, it will be automatically transformed using its `toString` function.
+ *
+ * @param {*} value Value to trim.
+ * @return {string} The trimmed value.
+ */
 export function trim(value) {
   return _trim(value);
 }

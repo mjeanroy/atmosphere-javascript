@@ -5,6 +5,7 @@
   "main": "src/main/webapp/javascript/atmosphere.js",
   "registry": "npm",
   "scripts": {
+    "lint": "gulp lint",
     "tdd": "gulp tdd",
     "test": "gulp test"
   },
@@ -23,10 +24,11 @@
     "@babel/preset-env": "7.5.5",
     "ansi-colors": "4.1.1",
     "del": "5.0.0",
-    "eslint": "6.1.0",
-    "eslint-config-google": "0.13.0",
+    "eslint": "^6.1.0",
+    "eslint-config-google": "^0.13.0",
     "fancy-log": "1.3.3",
     "gulp": "4.0.2",
+    "gulp-eslint": "^6.0.0",
     "jasmine-core": "3.4.0",
     "karma": "4.2.0",
     "karma-chrome-launcher": "3.1.0",

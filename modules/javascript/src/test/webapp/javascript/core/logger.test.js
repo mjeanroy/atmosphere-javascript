@@ -67,23 +67,23 @@ describe('Logger', () => {
 
     it('should log info message', () => {
       logger.info(msg);
-  
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
       expect(console.error).not.toHaveBeenCalled();
-  
+
       expect(console.info).toHaveBeenCalledWith(
           `${now.toString()} Atmosphere: ${msg}`
-       );
+      );
     });
 
     it('should log warn message', () => {
       logger.warn(msg);
-  
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).not.toHaveBeenCalled();
       expect(console.error).not.toHaveBeenCalled();
-  
+
       expect(console.warn).toHaveBeenCalledWith(
           `${now.toString()} Atmosphere: ${msg}`
       );
@@ -91,11 +91,11 @@ describe('Logger', () => {
 
     it('should log error message', () => {
       logger.error(msg);
-    
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).not.toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
-    
+
       expect(console.error).toHaveBeenCalledWith(
           `${now.toString()} Atmosphere: ${msg}`
       );
@@ -127,23 +127,23 @@ describe('Logger', () => {
 
     it('should log info message', () => {
       logger.info(msg);
-  
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
       expect(console.error).not.toHaveBeenCalled();
-  
+
       expect(console.info).toHaveBeenCalledWith(
           `${now.toString()} Atmosphere: ${msg}`
-       );
+      );
     });
 
     it('should log warn message', () => {
       logger.warn(msg);
-  
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).not.toHaveBeenCalled();
       expect(console.error).not.toHaveBeenCalled();
-  
+
       expect(console.warn).toHaveBeenCalledWith(
           `${now.toString()} Atmosphere: ${msg}`
       );
@@ -151,11 +151,11 @@ describe('Logger', () => {
 
     it('should log error message', () => {
       logger.error(msg);
-    
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).not.toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
-    
+
       expect(console.error).toHaveBeenCalledWith(
           `${now.toString()} Atmosphere: ${msg}`
       );
@@ -187,7 +187,7 @@ describe('Logger', () => {
 
     it('should not log info message', () => {
       logger.info(msg);
-  
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).not.toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
@@ -196,11 +196,11 @@ describe('Logger', () => {
 
     it('should log warn message', () => {
       logger.warn(msg);
-  
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).not.toHaveBeenCalled();
       expect(console.error).not.toHaveBeenCalled();
-  
+
       expect(console.warn).toHaveBeenCalledWith(
           `${now.toString()} Atmosphere: ${msg}`
       );
@@ -208,11 +208,11 @@ describe('Logger', () => {
 
     it('should log error message', () => {
       logger.error(msg);
-    
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).not.toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
-    
+
       expect(console.error).toHaveBeenCalledWith(
           `${now.toString()} Atmosphere: ${msg}`
       );
@@ -244,7 +244,7 @@ describe('Logger', () => {
 
     it('should not log info message', () => {
       logger.info(msg);
-  
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).not.toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
@@ -253,7 +253,7 @@ describe('Logger', () => {
 
     it('should not log warn message', () => {
       logger.warn(msg);
-  
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).not.toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
@@ -262,11 +262,11 @@ describe('Logger', () => {
 
     it('should log error message', () => {
       logger.error(msg);
-    
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).not.toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
-    
+
       expect(console.error).toHaveBeenCalledWith(
           `${now.toString()} Atmosphere: ${msg}`
       );

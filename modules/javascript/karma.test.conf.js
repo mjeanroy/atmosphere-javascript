@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+/* eslint-env node */
+
 const _ = require('lodash');
 const commonConf = require('./karma.common.conf.js');
 

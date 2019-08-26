@@ -36,12 +36,12 @@ const LEVELS = {
  * @class
  */
 class ConsoleLogger {
-    /**
-     * Create new logger.
-     *
-     * @param {string} level Logger level.
-     * @constructor
-     */
+  /**
+   * Create new logger.
+   *
+   * @param {string} level Logger level.
+   * @constructor
+   */
   constructor(level = 'info') {
     this._level = level;
   }
