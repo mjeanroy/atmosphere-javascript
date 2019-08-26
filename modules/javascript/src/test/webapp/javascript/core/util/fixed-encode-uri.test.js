@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-import './common';
-import './core/index';
-import './atmosphere-ws.test';
+import {fixedEncodeURI} from '~/core/util/fixed-encode-uri';
+
+describe('fixedEncodeURI', () => {
+  it('should encode given URI', () => {
+    expect(fixedEncodeURI('http://localhost/path test')).toBe('http://localhost/path%20test');
+  });
+
+  it('should encode given URI and keep "[" and "]"', () => {
+    expect(fixedEncodeURI('http://localhost/path?q=[test]')).toBe('http://localhost/path?q=[test]');
+  });
+});

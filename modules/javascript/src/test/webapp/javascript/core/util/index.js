@@ -14,5 +14,9 @@
  * limitations under the License.
  */
 
+import './fixed-encode-uri.test';
+import './get-absolute-url.test';
+import './get-user-agent.test';
 import './has.test';
+import './is-undefined.test';
 import './trim.test';

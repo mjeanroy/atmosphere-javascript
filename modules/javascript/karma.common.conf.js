@@ -29,6 +29,9 @@ module.exports = (config) => ({
   ],
 
   files: [
+    path.join(__dirname, 'node_modules', 'jasmine-utils', 'src', 'jasmine-utils.js'),
+    path.join(__dirname, 'node_modules', 'jasmine-ws', 'dist', 'jasmine-ws.js'),
+    path.join(__dirname, 'node_modules', 'jasmine-sse', 'dist', 'jasmine-sse.js'),
     entryPoint,
   ],
 

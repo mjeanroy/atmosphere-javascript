@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-import './common';
-import './core/index';
-import './atmosphere-ws.test';
+/**
+ * Encode given URI, and replace:
+ * - `%5B` with `[`
+ * - `%5D` with `]`
+ *
+ * @param {string} str The URI to encode.
+ * @return {string} The encoded URI.
+ */
+export function fixedEncodeURI(str) {
+  return encodeURI(str).replace(/%5B/g, '[').replace(/%5D/g, ']');
+}

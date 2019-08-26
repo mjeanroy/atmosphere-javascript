@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-import './common';
-import './core/index';
-import './atmosphere-ws.test';
+/**
+ * Get current user-agent.
+ *
+ * @return {string} The detected user-agent.
+ */
+export function getUserAgent() {
+  return window.navigator.userAgent;
+}

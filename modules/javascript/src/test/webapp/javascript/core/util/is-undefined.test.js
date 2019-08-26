@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
-import './common';
-import './core/index';
-import './atmosphere-ws.test';
+import {isUndefined} from '~/core/util/is-undefined';
+
+describe('isUndefined', () => {
+  it('should check if value is undefined', () => {
+    expect(isUndefined(undefined)).toBeTrue();
+
+    expect(isUndefined(null)).toBeFalse();
+    expect(isUndefined(0)).toBeFalse();
+    expect(isUndefined('')).toBeFalse();
+    expect(isUndefined([])).toBeFalse();
+    expect(isUndefined(false)).toBeFalse();
+  });
+});

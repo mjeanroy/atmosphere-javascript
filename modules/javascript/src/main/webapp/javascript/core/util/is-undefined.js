@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-import atmosphere from '~/index';
-
-describe('atmosphere', () => {
-  afterEach(() => {
-    atmosphere.unbindEvents();
-  });
-
-  it('should subscribe using default options', () => {
-    const subscription = atmosphere.subscribe();
-    expect(subscription).toBeDefined();
-  });
-});
+/**
+ * Check if given value is `undefined`.
+ *
+ * @param {*} value Value to check.
+ * @return {boolean} `true` if value is `undefined`, `false` otherwise.
+ */
+export function isUndefined(value) {
+  return value === undefined;
+}

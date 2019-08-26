@@ -21,18 +21,10 @@ describe('Logger', () => {
   let now;
 
   beforeEach(() => {
-    msg = 'Test';
+    msg = 'Atmosphere: Test';
     now = new Date();
 
-    jasmine.clock().install();
     jasmine.clock().mockDate(now);
-  });
-
-  beforeEach(() => {
-    spyOn(console, 'debug');
-    spyOn(console, 'info');
-    spyOn(console, 'warn');
-    spyOn(console, 'error');
   });
 
   afterEach(() => {

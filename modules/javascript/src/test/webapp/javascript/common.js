@@ -14,6 +14,32 @@
  * limitations under the License.
  */
 
-import './common';
-import './core/index';
-import './atmosphere-ws.test';
+import atmosphere from '~/index';
+
+beforeEach(() => {
+  jasmine.clock().install();
+});
+
+afterEach(() => {
+  jasmine.clock().uninstall();
+});
+
+beforeEach(() => {
+  const methods = ['log', 'debug', 'info', 'warn', 'error'];
+
+  for (let i = 0, size = methods.length; i < size; ++i) {
+    const name = methods[i];
+    const fn = console[name];
+    if (fn) {
+      spyOn(console, name).and.callFake((msg, ...args) => {
+        if (msg.indexOf('Atmosphere:') < 0) {
+          fn.call(console, msg, ...args);
+        }
+      });
+    }
+  }
+});
+
+afterEach(() => {
+  atmosphere.unbindEvents();
+});

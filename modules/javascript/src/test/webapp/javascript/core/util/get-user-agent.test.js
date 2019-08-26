@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
-import './common';
-import './core/index';
-import './atmosphere-ws.test';
+import {getUserAgent} from '~/core/util/get-user-agent';
+
+describe('getUserAgent', () => {
+  it('should get current user-agent', () => {
+    expect(getUserAgent()).toBe(window.navigator.userAgent);
+  });
+});

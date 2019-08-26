@@ -28,6 +28,8 @@
  */
 
 import {trim} from './core/util/trim';
+import {fixedEncodeURI} from './core/util/fixed-encode-uri';
+import {getAbsoluteURL} from './core/util/get-absolute-url';
 import {DEBUG, INFO, WARN, ERROR, createLogger} from './core/logger';
 
 var atmosphere = {},
@@ -537,7 +539,7 @@ atmosphere = {
          */
         function _supportSSE() {
             // Origin parts
-            var url = atmosphere.util.getAbsoluteURL(_request.url.toLowerCase());
+            var url = getAbsoluteURL(_request.url.toLowerCase());
             var parts = /^([\w\+\.\-]+:)(?:\/\/([^\/?#:]*)(?::(\d+))?)?/.exec(url);
             var crossOrigin = !!(parts && (
                 // protocol
@@ -1157,7 +1159,7 @@ atmosphere = {
          * @private
          */
         function _buildWebSocketUrl() {
-            return _attachHeaders(_request, atmosphere.util.getAbsoluteURL(_request.webSocketUrl || _request.url)).replace(/^http/, "ws");
+            return _attachHeaders(_request, getAbsoluteURL(_request.webSocketUrl || _request.url)).replace(/^http/, "ws");
         }
 
         /**
@@ -3028,28 +3030,12 @@ atmosphere.util = {
         return Object.prototype.toString.call(fn) === "[object Function]";
     },
 
-    getAbsoluteURL: function (url) {
-        if (typeof (document.createElement) === 'undefined') {
-            // assuming the url to be already absolute when DOM is not supported
-            return url;
-        }
-        var div = document.createElement("div");
-
-        // Uses an innerHTML property to obtain an absolute URL
-        div.innerHTML = '<a href="' + url + '"/>';
-
-        // encodeURI and decodeURI are needed to normalize URL between IE and non-IE,
-        // since IE doesn't encode the href property value and return it - http://jsfiddle.net/Yq9M8/1/
-
-        var ua = window.navigator.userAgent;
-        if (ua.indexOf('MSIE ') > 0 || ua.indexOf('Trident/') > 0 || ua.indexOf('Edge/') > 0) {
-            return atmosphere.util.fixedEncodeURI(decodeURI(div.firstChild.href));
-        }
-        return div.firstChild.href;
+    getAbsoluteURL(url) {
+        return getAbsoluteURL(url);
     },
 
-    fixedEncodeURI: function (str) {
-        return encodeURI(str).replace(/%5B/g, '[').replace(/%5D/g, ']');
+    fixedEncodeURI(str) {
+        return fixedEncodeURI(str);
     },
 
     prepareURL: function (url) {
@@ -3209,8 +3195,9 @@ atmosphere.util = {
     },
 
     log(level, args) {
-        logger.setLogLevel(_request.logLevel);
-        logger.log(level, ...args);
+        if (logger) {
+          logger.log(level, ...args);
+        }
     },
 
     warn(...args) {
@@ -3222,7 +3209,7 @@ atmosphere.util = {
     },
 
     debug(...args) {
-        logger.log(DEBUG, ...args);
+        atmosphere.util.log(DEBUG, args);
     },
 
     error() {
