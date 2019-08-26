@@ -16,7 +16,6 @@
 
 const path = require('path');
 const babel = require('rollup-plugin-babel');
-const includePaths = require('rollup-plugin-includepaths');
 const entryPoint = path.join(__dirname, 'src', 'test', 'webapp', 'javascript', 'index.js');
 
 module.exports = (config) => ({
@@ -100,11 +99,15 @@ module.exports = (config) => ({
 
     plugins: [
       babel(),
-      includePaths({
-        paths: [
-          path.join(__dirname, 'src', 'main', 'webapp', 'javascript'),
-        ],
-      }),
+
+      {
+        resolveId(id) {
+          if (id && id.charAt(0) === '~') {
+            const absoluteDir = path.join(__dirname, 'src', 'main', 'webapp', 'javascript');
+            return absoluteDir + id.slice(1) + '.js';
+          }
+        },
+      },
     ],
   },
 });

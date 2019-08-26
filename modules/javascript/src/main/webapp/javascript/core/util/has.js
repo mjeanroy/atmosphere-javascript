@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-import {trim} from '~/core/util/trim';
-
-describe('trim', () => {
-  it('should trim given value', () => {
-    expect(trim('')).toBe('');
-    expect(trim('foo  ')).toBe('foo');
-    expect(trim('  foo')).toBe('foo');
-    expect(trim('  foo  ')).toBe('foo');
-  });
-});
+export function has(obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}

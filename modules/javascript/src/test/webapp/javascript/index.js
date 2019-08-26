@@ -15,3 +15,4 @@
  */
 
 import './core/index';
+import './index.test';

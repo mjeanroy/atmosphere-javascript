@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-import {trim} from '~/core/util/trim';
+import atmosphere from '~/index';
 
-describe('trim', () => {
-  it('should trim given value', () => {
-    expect(trim('')).toBe('');
-    expect(trim('foo  ')).toBe('foo');
-    expect(trim('  foo')).toBe('foo');
-    expect(trim('  foo  ')).toBe('foo');
+describe('atmosphere', () => {
+  afterEach(() => {
+    atmosphere.unbindEvents();
+  });
+
+  it('should subscribe using default options', () => {
+    const subscription = atmosphere.subscribe();
+    expect(subscription).toBeDefined();
   });
 });

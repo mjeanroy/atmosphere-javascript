@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-import {trim} from '~/core/util/trim';
+import {has} from '~/core/util/has';
 
-describe('trim', () => {
-  it('should trim given value', () => {
-    expect(trim('')).toBe('');
-    expect(trim('foo  ')).toBe('foo');
-    expect(trim('  foo')).toBe('foo');
-    expect(trim('  foo  ')).toBe('foo');
+describe('has', () => {
+  it('should check if object has given key', () => {
+    expect(has({id: 1}, 'id')).toBe(true);
+    expect(has({id: 1}, 'toString')).toBe(false);
   });
 });

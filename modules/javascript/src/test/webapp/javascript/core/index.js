@@ -15,3 +15,4 @@
  */
 
 import './util/index';
+import './logger.test';
