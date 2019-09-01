@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-import './fixed-encode-uri.test';
-import './get-absolute-url.test';
-import './get-user-agent.test';
-import './has.test';
-import './is-function.test';
-import './is-nil.test';
-import './is-null.test';
-import './is-string.test';
-import './is-undefined.test';
-import './is.test';
-import './tag-name.test';
-import './trim.test';
+import {is} from './is';
+
+/**
+ * Check that a given value is a function.
+ *
+ * @param {*} value Value to check.
+ * @return {boolean} `true` if `value` is a function, `false` otherwise.
+ */
+export function isFunction(value) {
+  return is(value, 'Function');
+}

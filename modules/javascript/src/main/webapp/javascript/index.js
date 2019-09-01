@@ -27,6 +27,9 @@
  * - Portal by Donghwan Kim http://flowersinthesand.github.io/portal/
  */
 
+import {isFunction} from './core/util/is-function';
+import {isNil} from './core/util/is-nil';
+import {isString} from './core/util/is-string';
 import {trim} from './core/util/trim';
 import {fixedEncodeURI} from './core/util/fixed-encode-uri';
 import {getAbsoluteURL} from './core/util/get-absolute-url';
@@ -1010,7 +1013,7 @@ atmosphere = {
 
             var rq = _request,
                 script;
-            if ((request != null) && (typeof (request) !== 'undefined')) {
+            if (!isNil(requestrequest)) {
                 rq = request;
             }
 
@@ -1099,7 +1102,7 @@ atmosphere = {
                                 _reconnect(_jqxhr, rq, rq.pollingInterval);
                             }
 
-                            if (msg != null && typeof msg !== 'string') {
+                            if (msg != null && !isString(msg)) {
                                 try {
                                     msg = msg.message;
                                 } catch (err) {
@@ -1395,8 +1398,7 @@ atmosphere = {
                 _response.status = 200;
 
                 message = message.data;
-                var isString = typeof (message) === 'string';
-                if (isString) {
+                if (isString(message)) {
                     var skipCallbackInvocation = _trackMessageSize(message, _request, _response);
                     if (!skipCallbackInvocation) {
                         _invokeCallback();
@@ -1684,9 +1686,9 @@ atmosphere = {
         function _reconnectWithFallbackTransport(errorMessage) {
             atmosphere.util.log(_request.logLevel, [errorMessage]);
 
-            if (typeof (_request.onTransportFailure) !== 'undefined') {
+            if (isFunction(_request.onTransportFailure)) {
                 _request.onTransportFailure(errorMessage, _request);
-            } else if (typeof (atmosphere.util.onTransportFailure) !== 'undefined') {
+            } else if (isFunction(atmosphere.util.onTransportFailure)) {
                 atmosphere.util.onTransportFailure(errorMessage, _request);
             }
 
@@ -1719,7 +1721,7 @@ atmosphere = {
          */
         function _attachHeaders(request, url) {
             var rq = _request;
-            if ((request != null) && (typeof (request) !== 'undefined')) {
+            if (!isNil(request)) {
                 rq = request;
             }
 
@@ -1809,7 +1811,7 @@ atmosphere = {
          */
         function _executeRequest(request) {
             var rq = _request;
-            if ((request != null) || (typeof (request) !== 'undefined')) {
+            if (!isNil(request)) {
                 rq = request;
             }
 
@@ -2210,7 +2212,7 @@ atmosphere = {
 
         function _configureXDR(request) {
             var rq = _request;
-            if ((request != null) && (typeof (request) !== 'undefined')) {
+            if (!isNil(request)) {
                 rq = request;
             }
 
@@ -2331,7 +2333,7 @@ atmosphere = {
 
         function _configureIE(request) {
             var rq = _request;
-            if ((request != null) && (typeof (request) !== 'undefined')) {
+            if (!isNil(request)) {
                 rq = request;
             }
 
@@ -2668,9 +2670,9 @@ atmosphere = {
         function _localMessage(message) {
             var m = JSON.parse(message);
             if (m.id !== guid) {
-                if (typeof (_request.onLocalMessage) !== 'undefined') {
+                if (isFunction(_request.onLocalMessage)) {
                     _request.onLocalMessage(m.event);
-                } else if (typeof (atmosphere.util.onLocalMessage) !== 'undefined') {
+                } else if (isFunction(atmosphere.util.onLocalMessage)) {
                     atmosphere.util.onLocalMessage(m.event);
                 }
             }
@@ -2713,67 +2715,67 @@ atmosphere = {
                 case "messageReceived":
                     atmosphere.util.debug("Firing onMessage");
                     _requestCount = 0;
-                    if (typeof (f.onMessage) !== 'undefined')
+                    if (isFunction(f.onMessage))
                         f.onMessage(response);
 
-                    if (typeof (f.onmessage) !== 'undefined')
+                    if (isFunction(f.onmessage))
                         f.onmessage(response);
                     break;
                 case "error":
-                    var dbgReasonPhrase = (typeof (response.reasonPhrase) != 'undefined') ? response.reasonPhrase : 'n/a';
+                    var dbgReasonPhrase = isNil(response.reasonPhrase) ? 'n/a' : response.reasonPhrase;
                     atmosphere.util.debug("Firing onError, reasonPhrase: " + dbgReasonPhrase);
-                    if (typeof (f.onError) !== 'undefined')
+                    if (isFunction(f.onError))
                         f.onError(response);
 
-                    if (typeof (f.onerror) !== 'undefined')
+                    if (isFunction(f.onerror))
                         f.onerror(response);
                     break;
                 case "opening":
                     delete _request.closed;
                     atmosphere.util.debug("Firing onOpen");
-                    if (typeof (f.onOpen) !== 'undefined')
+                    if (isFunction(f.onOpen))
                         f.onOpen(response);
 
-                    if (typeof (f.onopen) !== 'undefined')
+                    if (isFunction(f.onopen))
                         f.onopen(response);
                     break;
                 case "messagePublished":
                     atmosphere.util.debug("Firing messagePublished");
-                    if (typeof (f.onMessagePublished) !== 'undefined')
+                    if (isFunction(f.onMessagePublished))
                         f.onMessagePublished(response);
                     break;
                 case "re-connecting":
                     atmosphere.util.debug("Firing onReconnect");
-                    if (typeof (f.onReconnect) !== 'undefined')
+                    if (isFunction(f.onReconnect))
                         f.onReconnect(_request, response);
                     break;
                 case "closedByClient":
                     atmosphere.util.debug("Firing closedByClient");
-                    if (typeof (f.onClientTimeout) !== 'undefined')
+                    if (isFunction(f.onClientTimeout))
                         f.onClientTimeout(_request);
                     break;
                 case "re-opening":
                     delete _request.closed;
                     atmosphere.util.debug("Firing onReopen");
-                    if (typeof (f.onReopen) !== 'undefined')
+                    if (isFunction(f.onReopen))
                         f.onReopen(_request, response);
                     break;
                 case "fail-to-reconnect":
                     atmosphere.util.debug("Firing onFailureToReconnect");
-                    if (typeof (f.onFailureToReconnect) !== 'undefined')
+                    if (isFunction(f.onFailureToReconnect))
                         f.onFailureToReconnect(_request, response);
                     break;
                 case "unsubscribe":
                 case "closed":
-                    var closed = typeof (_request.closed) !== 'undefined' ? _request.closed : false;
+                    var closed = !isNil(_request.closed) ? _request.closed : false;
 
                     if (!closed) {
                         atmosphere.util.debug("Firing onClose (" + response.state + " case)");
-                        if (typeof (f.onClose) !== 'undefined') {
+                        if (isFunction(f.onClose)) {
                             f.onClose(response);
                         }
 
-                        if (typeof (f.onclose) !== 'undefined') {
+                        if (isFunction(f.onclose)) {
                             f.onclose(response);
                         }
                     } else {
@@ -2782,7 +2784,7 @@ atmosphere = {
                     _request.closed = true;
                     break;
                 case "openAfterResume":
-                    if (typeof (f.onOpenAfterResume) !== 'undefined')
+                    if (isFunction(f.onOpenAfterResume))
                         f.onOpenAfterResume(_request);
                     break;
             }
@@ -2814,22 +2816,22 @@ atmosphere = {
 
             _request.reconnect = _request.mrequest;
 
-            var isString = typeof (_response.responseBody) === 'string';
-            var messages = (isString && _request.trackMessageLength) ? (_response.messages.length > 0 ? _response.messages : ['']) : new Array(
+            var isStr = isString(_response.responseBody);
+            var messages = (isStr && _request.trackMessageLength) ? (_response.messages.length > 0 ? _response.messages : ['']) : new Array(
                 _response.responseBody);
             for (var i = 0; i < messages.length; i++) {
 
                 if (messages.length > 1 && messages[i].length === 0) {
                     continue;
                 }
-                _response.responseBody = (isString) ? trim(messages[i]) : messages[i];
+                _response.responseBody = (isStr) ? trim(messages[i]) : messages[i];
 
                 if (_localStorageService == null && _localSocketF != null) {
                     _localSocketF(_response.responseBody);
                 }
 
                 if ((_response.responseBody.length === 0 ||
-                        (isString && _heartbeatPadding === _response.responseBody)) && _response.state === "messageReceived") {
+                        (isStr && _heartbeatPadding === _response.responseBody)) && _response.state === "messageReceived") {
                     continue;
                 }
 
@@ -2847,7 +2849,7 @@ atmosphere = {
                 }
 
                 // Invoke request callback
-                if (typeof (_request.callback) === 'function') {
+                if (isFunction(_request.callback)) {
                     atmosphere.util.debug("Invoking request callbacks");
 
                     try {
@@ -2913,18 +2915,18 @@ atmosphere = {
 };
 
 atmosphere.subscribe = function (url, callback, request) {
-    if (typeof (callback) === 'function') {
+    if (isFunction(callback)) {
         atmosphere.addCallback(callback);
     }
 
-    if (typeof (url) !== "string") {
+    if (!isString(url)) {
         request = url;
     } else {
         request.url = url;
     }
 
     // https://github.com/Atmosphere/atmosphere-javascript/issues/58
-    uuid = ((typeof (request) !== 'undefined') && typeof (request.uuid) !== 'undefined') ? request.uuid : 0;
+    uuid = !isNil(request) && !isNil(request.uuid) ? request.uuid : 0;
 
     var rq = new atmosphere.AtmosphereRequest(request);
     rq.execute();

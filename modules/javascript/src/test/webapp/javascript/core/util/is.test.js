@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-import './fixed-encode-uri.test';
-import './get-absolute-url.test';
-import './get-user-agent.test';
-import './has.test';
-import './is-function.test';
-import './is-nil.test';
-import './is-null.test';
-import './is-string.test';
-import './is-undefined.test';
-import './is.test';
-import './tag-name.test';
-import './trim.test';
+import {is} from '~/core/util/is';
+
+describe('is', () => {
+  it('should return true for expected tag name', () => {
+    expect(is('', 'String')).toBe(true);
+    expect(is(0, 'Number')).toBe(true);
+    expect(is(true, 'Boolean')).toBe(true);
+    expect(is([], 'Array')).toBe(true);
+    expect(is(new Date(), 'Date')).toBe(true);
+  });
+});

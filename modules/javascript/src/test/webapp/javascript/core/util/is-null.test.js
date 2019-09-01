@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-import './fixed-encode-uri.test';
-import './get-absolute-url.test';
-import './get-user-agent.test';
-import './has.test';
-import './is-function.test';
-import './is-nil.test';
-import './is-null.test';
-import './is-string.test';
-import './is-undefined.test';
-import './is.test';
-import './tag-name.test';
-import './trim.test';
+import {isNull} from '~/core/util/is-null';
+
+describe('isNull', () => {
+  it('should return true with undefined', () => {
+    expect(isNull(null)).toBe(true);
+  });
+
+  it('should return false without undefined', () => {
+    expect(isNull(0)).toBe(false);
+    expect(isNull(true)).toBe(false);
+    expect(isNull({})).toBe(false);
+    expect(isNull(() => {})).toBe(false);
+    expect(isNull(undefined)).toBe(false);
+  });
+});

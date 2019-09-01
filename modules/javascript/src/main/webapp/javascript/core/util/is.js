@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-import './fixed-encode-uri.test';
-import './get-absolute-url.test';
-import './get-user-agent.test';
-import './has.test';
-import './is-function.test';
-import './is-nil.test';
-import './is-null.test';
-import './is-string.test';
-import './is-undefined.test';
-import './is.test';
-import './tag-name.test';
-import './trim.test';
+import {tagName} from './tag-name';
+
+/**
+ * Check that a given value is of a given type.
+ * The type is the tag name displayed with `Object.prototype.toString`
+ * function call.
+ *
+ * @param {*} obj Value to check.
+ * @param {string} type The type id.
+ * @return {boolean} `true` if `obj` is of given type, `false` otherwise.
+ */
+export function is(obj, type) {
+  return tagName(obj) === `[object ${type}]`;
+}

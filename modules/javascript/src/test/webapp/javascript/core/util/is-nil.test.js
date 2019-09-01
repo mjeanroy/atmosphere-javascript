@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-import './fixed-encode-uri.test';
-import './get-absolute-url.test';
-import './get-user-agent.test';
-import './has.test';
-import './is-function.test';
-import './is-nil.test';
-import './is-null.test';
-import './is-string.test';
-import './is-undefined.test';
-import './is.test';
-import './tag-name.test';
-import './trim.test';
+import {isNil} from '~/core/util/is-nil';
+
+describe('isNil', () => {
+  it('should return true with undefined or null', () => {
+    expect(isNil(null)).toBe(true);
+    expect(isNil(undefined)).toBe(true);
+    expect(isNil(void 0)).toBe(true);
+  });
+
+  it('should return false without undefined', () => {
+    expect(isNil(0)).toBe(false);
+    expect(isNil(true)).toBe(false);
+    expect(isNil({})).toBe(false);
+    expect(isNil(() => {})).toBe(false);
+  });
+});

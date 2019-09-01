@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import './fixed-encode-uri.test';
-import './get-absolute-url.test';
-import './get-user-agent.test';
-import './has.test';
-import './is-function.test';
-import './is-nil.test';
-import './is-null.test';
-import './is-string.test';
-import './is-undefined.test';
-import './is.test';
-import './tag-name.test';
-import './trim.test';
+import {isNull} from './is-null';
+import {isUndefined} from './is-undefined';
+
+/**
+ * Check if given value is `null` or `undefined`.
+ *
+ * @param {*} value Value to check.
+ * @return {boolean} `true` if value is `null` or `undefined`, `false` otherwise.
+ */
+export function isNil(value) {
+  return isNull(value) || isUndefined(value);
+}

@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-import './fixed-encode-uri.test';
-import './get-absolute-url.test';
-import './get-user-agent.test';
-import './has.test';
-import './is-function.test';
-import './is-nil.test';
-import './is-null.test';
-import './is-string.test';
-import './is-undefined.test';
-import './is.test';
-import './tag-name.test';
-import './trim.test';
+import {isFunction} from '~/core/util/is-function';
+
+describe('isFunction', () => {
+  it('should return true with a function', () => {
+    const value = () => {};
+    const result = isFunction(value);
+    expect(result).toBe(true);
+  });
+
+  it('should return false without a function', () => {
+    expect(isFunction(true)).toBe(false);
+    expect(isFunction({})).toBe(false);
+    expect(isFunction(0)).toBe(false);
+    expect(isFunction(null)).toBe(false);
+    expect(isFunction(undefined)).toBe(false);
+  });
+});

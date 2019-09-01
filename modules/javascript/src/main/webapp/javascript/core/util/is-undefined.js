@@ -21,5 +21,5 @@
  * @return {boolean} `true` if value is `undefined`, `false` otherwise.
  */
 export function isUndefined(value) {
-  return value === undefined;
+  return value === void 0;
 }
