@@ -32,6 +32,7 @@ module.exports = (config) => ({
     path.join(__dirname, 'node_modules', 'jasmine-utils', 'src', 'jasmine-utils.js'),
     path.join(__dirname, 'node_modules', 'jasmine-ws', 'dist', 'jasmine-ws.js'),
     path.join(__dirname, 'node_modules', 'jasmine-sse', 'dist', 'jasmine-sse.js'),
+    path.join(__dirname, 'node_modules', 'jasmine-ajax', 'lib', 'mock-ajax.js'),
     entryPoint,
   ],
 

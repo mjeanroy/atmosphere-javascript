@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-import './tests/jasmine/clock';
-import './tests/jasmine/console';
-import './tests/jasmine/atmosphere';
+import atmosphere from '~/index';
 
-import './core/index';
-import './atmosphere-sse.test';
-import './atmosphere-ws.test';
+afterEach(() => {
+  atmosphere.unbindEvents();
+});

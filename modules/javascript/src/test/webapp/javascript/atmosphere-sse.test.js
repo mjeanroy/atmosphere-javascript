@@ -20,7 +20,7 @@ import {resetConsoleSpies} from './tests/jasmine/console';
 import {resetSpies} from './tests/jasmine/reset-spies';
 import {parseUrl} from './tests/utils/parse-url';
 
-describe('atmosphere WS', () => {
+describe('atmosphere SSE', () => {
   let now;
 
   beforeEach(() => {
@@ -29,11 +29,13 @@ describe('atmosphere WS', () => {
   });
 
   beforeEach(() => {
-    jasmine.ws().install();
+    jasmine.sse().install();
+    jasmine.Ajax.install();
   });
 
   afterEach(() => {
-    jasmine.ws().uninstall();
+    jasmine.sse().uninstall();
+    jasmine.Ajax.uninstall();
   });
 
   it('should subscribe using given URL', () => {
@@ -42,30 +44,30 @@ describe('atmosphere WS', () => {
 
     const rq = socket.request;
     expect(rq).toBeDefined();
-    expect(rq.url).toBe('wss://localhost/ws');
+    expect(rq.url).toBe('http://localhost:9876/sse');
     expect(rq.logLevel).toBe('debug');
-    expect(rq.transport).toBe('websocket');
+    expect(rq.transport).toBe('sse');
 
-    const connections = jasmine.ws().connections();
+    const connections = jasmine.sse().connections();
     expect(connections.count()).toBe(1);
 
     const connection = connections.mostRecent();
     expect(connection.readyState).toBe(0);
 
     const connectionUrl = parseUrl(connection.url);
-    expect(connectionUrl.protocol).toBe('wss:');
-    expect(connectionUrl.host).toBe('localhost');
-    expect(connectionUrl.pathname).toBe('/ws');
+    expect(connectionUrl.protocol).toBe('http:');
+    expect(connectionUrl.host).toBe('localhost:9876');
+    expect(connectionUrl.pathname).toBe('/sse');
     expect(connectionUrl.parseSearchParams()).toEqual({
       'X-Atmosphere-tracking-id': jasmine.any(String),
       'X-Atmosphere-Framework': jasmine.any(String),
-      'X-Atmosphere-Transport': 'websocket',
+      'X-Atmosphere-Transport': 'sse',
       'X-atmo-protocol': 'true',
     });
 
-    expect(console.debug).toHaveBeenCalledWith(
-        `${now.toString()} Atmosphere: Invoking executeWebSocket, using URL: ${connection.url}`
-    );
+    const tt = now.toString();
+    expect(console.debug).toHaveBeenCalledWith(`${tt} Atmosphere: Invoking executeSSE`);
+    expect(console.debug).toHaveBeenCalledWith(`${tt} Atmosphere: Using URL: ${connection.url}`);
   });
 
   it('should subscribe to websocket and trigger connect timeout after interval', () => {
@@ -76,7 +78,7 @@ describe('atmosphere WS', () => {
       expect(e.status).toBe(501);
       expect(e.responseBody).toBe('');
       expect(e.reason).not.toBeDefined();
-      expect(e.transport).toBe('websocket');
+      expect(e.transport).toBe('sse');
       expect(e.headers).toEqual([]);
     });
 
@@ -91,20 +93,19 @@ describe('atmosphere WS', () => {
     expect(onMessage).not.toHaveBeenCalled();
     expect(onClose).not.toHaveBeenCalled();
 
+    const connection = jasmine.sse().connections().mostRecent();
+    expect(connection).toBeDefined();
+    expect(connection.readyState).toBe(0);
 
     tick(connectTimeout + 1);
 
+    expect(connection.readyState).toBe(2);
+
+    // The `onclose` event does not exist with SSE connection.
+    // So, expect it not to have been called.
+    expect(onClose).not.toHaveBeenCalled();
     expect(onOpen).not.toHaveBeenCalled();
     expect(onMessage).not.toHaveBeenCalled();
-    expect(onClose).toHaveBeenCalled();
-
-    const tt = new Date(now.getTime() + connectTimeout + 1).toString();
-
-    expect(console.debug).toHaveBeenCalledWith(`${tt} Atmosphere: websocket.onclose`);
-    expect(console.debug).toHaveBeenCalledWith(`${tt} Atmosphere: Firing onClose (closed case)`);
-    expect(console.debug).toHaveBeenCalledWith(`${tt} Atmosphere: Request already closed, not firing onClose (closed case)`);
-    expect(console.debug).toHaveBeenCalledWith(`${tt} Atmosphere: Websocket failed on first connection attempt. Downgrading to streaming and resending`);
-    expect(console.warn).toHaveBeenCalledWith(`${tt} Atmosphere: Websocket closed, reason: The endpoint is terminating the connection due to a protocol error. - wasClean: false`);
 
     expect(console.info).not.toHaveBeenCalled();
     expect(console.error).not.toHaveBeenCalled();
@@ -125,13 +126,17 @@ describe('atmosphere WS', () => {
     expect(onMessage).not.toHaveBeenCalled();
     expect(onClose).not.toHaveBeenCalled();
 
+    const connection = jasmine.sse().connections().mostRecent();
+    expect(connection).toBeDefined();
+    expect(connection.readyState).toBe(0);
+
     tick(10000);
 
+    expect(connection.readyState).toBe(0);
     expect(onOpen).not.toHaveBeenCalled();
     expect(onMessage).not.toHaveBeenCalled();
     expect(onClose).not.toHaveBeenCalled();
 
-    expect(console.debug).toHaveBeenCalledOnce();
     expect(console.info).not.toHaveBeenCalled();
     expect(console.warn).not.toHaveBeenCalled();
     expect(console.error).not.toHaveBeenCalled();
@@ -154,15 +159,13 @@ describe('atmosphere WS', () => {
         onClose,
       });
 
-      connection = jasmine.ws().connections().mostRecent();
+      connection = jasmine.sse().connections().mostRecent();
 
       resetConsoleSpies();
     });
 
     it('should trigger on open once opened', () => {
-      connection.openHandshake().respond();
-
-      expect(connection.readyState).toBe(1);
+      expect(connection.readyState).toBe(0);
       expect(onOpen).not.toHaveBeenCalled();
       expect(onMessage).not.toHaveBeenCalled();
 
@@ -170,7 +173,7 @@ describe('atmosphere WS', () => {
         expect(e.status).toBe(200);
         expect(e.responseBody).toBe('');
         expect(e.reason).not.toBeDefined();
-        expect(e.transport).toBe('websocket');
+        expect(e.transport).toBe('sse');
         expect(e.headers).toEqual([]);
       });
 
@@ -178,13 +181,14 @@ describe('atmosphere WS', () => {
         expect(e.status).toBe(200);
         expect(e.responseBody).toBe('X|');
         expect(e.reason).not.toBeDefined();
-        expect(e.transport).toBe('websocket');
+        expect(e.transport).toBe('sse');
         expect(e.headers).toEqual([]);
       });
 
-      // Since Atmosphere protocol is enabled, the first message will trigger the `onOpen` callback
-      connection.emitMessage('45|729e6d1c-9235-4c42-b889-b178ac4be424|10000|X|');
+      // Emitting a message will triggered the sse onopen event.
+      connection.emit('45|729e6d1c-9235-4c42-b889-b178ac4be424|10000|X|');
 
+      expect(connection.readyState).toBe(1);
       expect(onOpen).toHaveBeenCalledOnce();
       expect(onMessage).toHaveBeenCalledOnce();
 
@@ -192,9 +196,9 @@ describe('atmosphere WS', () => {
       expect(console.warn).not.toHaveBeenCalled();
       expect(console.error).not.toHaveBeenCalled();
 
-      expect(console.debug).toHaveBeenCalledWith(`${now.toString()} Atmosphere: websocket.onopen`);
-      expect(console.debug).toHaveBeenCalledWith(`${now.toString()} Atmosphere: Websocket successfully opened`);
-      expect(console.debug).toHaveBeenCalledWith(`${now.toString()} Atmosphere: websocket.onmessage`);
+      expect(console.debug).toHaveBeenCalledWith(`${now.toString()} Atmosphere: sse.onopen`);
+      expect(console.debug).toHaveBeenCalledWith(`${now.toString()} Atmosphere: SSE successfully opened`);
+      expect(console.debug).toHaveBeenCalledWith(`${now.toString()} Atmosphere: sse.onmessage`);
       expect(console.debug).toHaveBeenCalledWith(`${now.toString()} Atmosphere: Firing onOpen`);
       expect(console.debug).toHaveBeenCalledWith(`${now.toString()} Atmosphere: Firing onMessage`);
     });
@@ -217,9 +221,8 @@ describe('atmosphere WS', () => {
         onClose,
       });
 
-      connection = jasmine.ws().connections().mostRecent();
-      connection.openHandshake().respond();
-      connection.emitMessage('45|729e6d1c-9235-4c42-b889-b178ac4be424|10000|X|');
+      connection = jasmine.sse().connections().mostRecent();
+      connection.emit('45|729e6d1c-9235-4c42-b889-b178ac4be424|10000|X|');
 
       tick(1000);
       resetConsoleSpies();
@@ -234,11 +237,11 @@ describe('atmosphere WS', () => {
 
         expect(e.status).toBe(200);
         expect(e.reason).not.toBeDefined();
-        expect(e.transport).toBe('websocket');
+        expect(e.transport).toBe('sse');
         expect(e.headers).toEqual([]);
       });
 
-      connection.emitMessage(message);
+      connection.emit(message);
 
       expect(onOpen).not.toHaveBeenCalled();
       expect(onClose).not.toHaveBeenCalled();
@@ -254,10 +257,11 @@ describe('atmosphere WS', () => {
    */
   function subscribe({onOpen, onClose, onMessage, connectTimeout}) {
     return atmosphere.subscribe({
-      url: 'wss://localhost/ws',
-      transport: 'websocket',
+      url: 'http://localhost:9876/sse',
+      transport: 'sse',
       logLevel: 'debug',
       connectTimeout,
+      heartbeatInterval: 0,
 
       onOpen,
       onMessage,
