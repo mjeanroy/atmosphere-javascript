@@ -119,3 +119,14 @@ function restoreClearTimers() {
 export function tick(delay = 0) {
   jasmine.clock().tick(delay);
 }
+
+/**
+ * Mock the current date.
+ *
+ * @param {Date} now The current timestamp to use.
+ * @return {Date} The timestamp that is now used.
+ */
+export function mockDate(now = new Date()) {
+  jasmine.clock().mockDate(now);
+  return now;
+}

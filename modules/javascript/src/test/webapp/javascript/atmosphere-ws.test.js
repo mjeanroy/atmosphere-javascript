@@ -15,7 +15,7 @@
  */
 
 import atmosphere from '~/index';
-import {tick} from './tests/jasmine/clock';
+import {mockDate, tick} from './tests/jasmine/clock';
 import {resetConsoleSpies} from './tests/jasmine/console';
 import {resetSpies} from './tests/jasmine/reset-spies';
 import {parseUrl} from './tests/utils/parse-url';
@@ -24,8 +24,7 @@ describe('atmosphere WS', () => {
   let now;
 
   beforeEach(() => {
-    now = new Date();
-    jasmine.clock().mockDate(now);
+    now = mockDate();
   });
 
   beforeEach(() => {
